@@ -1,7 +1,10 @@
+import com.google.gson.Gson;
+import netscape.javascript.JSObject;
 import okhttp3.*;
 import okio.ByteString;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.logging.Logger;
 
@@ -25,7 +28,14 @@ public class Main {
             if (next.equals("close")){
                 break;
             }else {
-                webSocket.send(next);
+                HashMap<String,String> hashMap = new HashMap<>();
+                hashMap.put("from","java");
+                hashMap.put("to","android");
+                hashMap.put("message",next);
+
+                Gson gson = new Gson();
+                String s = gson.toJson(hashMap);
+                webSocket.send(s);
             }
         }
 
@@ -38,7 +48,10 @@ public class Main {
     }
 
    static void createRequest(){
-        Request request = new Request.Builder().url("http://localhost:8080/echo").build();
+       HttpUrl url = new HttpUrl.Builder().scheme("http").host("localhost").port(8080).encodedPath("/echo")
+               .addQueryParameter("userId","java").build();
+
+        Request request = new Request.Builder().url(url).build();
         OkHttpClient client = createClient();
 
        webSocket = client.newWebSocket(request, new WebSocketListener() {
