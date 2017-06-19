@@ -30,7 +30,7 @@ public class Main {
             }else {
                 HashMap<String,String> hashMap = new HashMap<>();
                 hashMap.put("from","java");
-                hashMap.put("to","android");
+                hashMap.put("to","all");
                 hashMap.put("message",next);
 
                 Gson gson = new Gson();
